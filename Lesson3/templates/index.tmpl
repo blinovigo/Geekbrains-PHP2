@@ -1,0 +1,12 @@
+<html>
+    <head></head>
+    <body>
+        <div>
+            {% for image in images %}
+            <a href="{{ "full-size.php?img=#{image}"}}">
+                <img src="{{ 'data/images/'~image }}" alt="" width="250" height="200">
+            </a>
+            {% endfor %}
+        </div>
+    </body>
+</html>
