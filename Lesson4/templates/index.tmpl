@@ -1,0 +1,57 @@
+<html>
+<head></head>
+<body>
+    <div>
+        <ul class="goods_list">
+
+        </ul>
+        <span onclick="makeRequest()">Еще-></span>
+    </div>
+
+    <script type="text/javascript" language="javascript">
+
+        function makeRequest() {
+            var httpRequest = false;
+            if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+                httpRequest = new XMLHttpRequest();
+                if (httpRequest.overrideMimeType) {
+                    httpRequest.overrideMimeType('text/xml');
+                    // Читайте ниже об этой строке
+                }
+            } else if (window.ActiveXObject) { // IE
+                try {
+                    httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {}
+                }
+            }
+
+            if (!httpRequest) {
+                alert('Не вышло :( Невозможно создать экземпляр класса XMLHTTP ');
+                return false;
+            }
+            httpRequest.onreadystatechange = function() { alertContents(httpRequest); };
+            var countGoods = document.querySelector('.goods_list').getElementsByTagName('li').length;
+            httpRequest.open('GET', 'index.php?m=getGoods&c='+countGoods, true);
+            httpRequest.send(null);
+
+        }
+
+        function alertContents(httpRequest) {
+            if (httpRequest.readyState == 4) {
+                if (httpRequest.status == 200) {
+                    responseView(httpRequest.responseText);
+                } else {
+                    alert('С запросом возникла проблема.');
+                }
+            }
+        }
+        function responseView(responseText){
+            var goods_list = document.querySelector('.goods_list');
+            goods_list.insertAdjacentHTML('beforeend',responseText);
+        }
+    </script>
+</body>
+</html>
